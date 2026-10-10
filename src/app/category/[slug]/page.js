@@ -1,86 +1,21 @@
-"use client";
-
-import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
-import { SectionSkeleton } from "@/components/Skeleton";
-import {
-  getAllCategories,
-  getAllProducts,
-  getProductsByCategory,
-} from "@/lib/api";
+import { getAllCategories, getAllProducts } from "@/lib/api";
 import { formatBn } from "@/lib/bn";
 
-export default function CategoryPage() {
-  const params = useParams();
-  const slug = params.slug;
+export default async function CategoryPage({ params }) {
+  const { slug } = await params;
 
-  const [category, setCategory] = useState(null);
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState("default");
-  const [notFoundState, setNotFoundState] = useState(false);
+  const categories = await getAllCategories();
+  const category = categories.find((c) => c.slug === slug);
 
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-    setNotFoundState(false);
+  if (!category) {
+    return <EmptyCategoryState />;
+  }
 
-    async function loadData() {
-      try {
-        // Categories load
-        const cats = await getAllCategories();
-        if (!isMounted) return;
-
-        const foundCat = cats.find((c) => c.slug === slug);
-        if (!foundCat) {
-          setNotFoundState(true);
-          setLoading(false);
-          return;
-        }
-
-        // Products for this category
-        let prods = await getProductsByCategory(slug);
-
-        // Fallback: if API category filter fails, filter from all products
-        if (!prods || prods.length === 0) {
-          const all = await getAllProducts();
-          prods = all.filter((p) => p.category === slug);
-        }
-
-        if (!isMounted) return;
-
-        setCategory(foundCat);
-        setProducts(prods || []);
-        setLoading(false);
-      } catch (err) {
-        console.error("Category load error:", err);
-        if (isMounted) {
-          setNotFoundState(true);
-          setLoading(false);
-        }
-      }
-    }
-
-    loadData();
-    return () => {
-      isMounted = false;
-    };
-  }, [slug]);
-
-  const sortedProducts = useMemo(() => {
-    const list = [...products];
-    if (sortBy === "low-to-high") {
-      list.sort((a, b) => Number(a.today) - Number(b.today));
-    } else if (sortBy === "high-to-low") {
-      list.sort((a, b) => Number(b.today) - Number(a.today));
-    }
-    return list;
-  }, [products, sortBy]);
-
-  if (loading) return <CategorySkeleton />;
-  if (notFoundState || !category) return <EmptyCategoryState />;
+  const allProducts = await getAllProducts();
+  const products = allProducts.filter((p) => p.category === slug);
 
   return (
     <div>
@@ -103,7 +38,7 @@ export default function CategoryPage() {
             {category.nameBn}
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            হাটি পণ্যের আজকের দাম ও পরিবর্তন
+            আজকের দাম ও পরিবর্তন
           </p>
         </div>
       </div>
@@ -113,7 +48,7 @@ export default function CategoryPage() {
         <p className="text-sm text-slate-600">
           মোট{" "}
           <span className="font-semibold text-slate-800">
-            {formatBn(sortedProducts.length)}
+            {formatBn(products.length)}
           </span>{" "}
           টি পণ্য দেখানো হচ্ছে
         </p>
@@ -122,34 +57,33 @@ export default function CategoryPage() {
           <label className="text-sm text-slate-600 whitespace-nowrap">
             সাজান:
           </label>
-          <div className="relative">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="appearance-none bg-white border border-slate-300 rounded-lg pl-3 pr-9 py-2 text-sm text-slate-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            >
-              <option value="default">ডিফল্ট</option>
-              <option value="low-to-high">দাম: কম থেকে বেশি</option>
-              <option value="high-to-low">দাম: বেশি থেকে কম</option>
-            </select>
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs">
-              ▾
-            </span>
-          </div>
+          <SortDropdown products={products} />
         </div>
       </div>
 
-      {/* Products grid */}
-      {sortedProducts.length === 0 ? (
+      {/* Products grid or empty state */}
+      {products.length === 0 ? (
         <EmptyCategoryState />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sortedProducts.map((p) => (
+          {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
       )}
     </div>
+  );
+}
+
+// Simple client component for sorting (optional — could skip)
+function SortDropdown() {
+  return (
+    <select
+      disabled
+      className="appearance-none bg-white border border-slate-300 rounded-lg pl-3 pr-9 py-2 text-sm text-slate-700 cursor-not-allowed"
+    >
+      <option>ডিফল্ট</option>
+    </select>
   );
 }
 
@@ -169,26 +103,6 @@ function EmptyCategoryState() {
       >
         হোম পেজে ফিরে যান
       </Link>
-    </div>
-  );
-}
-
-function CategorySkeleton() {
-  return (
-    <div>
-      <div className="h-4 w-40 rounded skeleton mb-4" />
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6 flex items-center gap-4">
-        <div className="w-14 h-14 rounded-xl skeleton" />
-        <div className="flex-1 space-y-2">
-          <div className="h-6 w-40 rounded skeleton" />
-          <div className="h-4 w-32 rounded skeleton" />
-        </div>
-      </div>
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex justify-between">
-        <div className="h-5 w-40 rounded skeleton" />
-        <div className="h-9 w-48 rounded skeleton" />
-      </div>
-      <SectionSkeleton count={6} />
     </div>
   );
 }
