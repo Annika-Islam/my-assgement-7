@@ -1,12 +1,21 @@
+import { Suspense } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
+import { SectionSkeleton } from "@/components/Skeleton";
 import { getAllCategories, getAllProducts } from "@/lib/api";
 import { formatBn } from "@/lib/bn";
 
 export default async function CategoryPage({ params }) {
   const { slug } = await params;
 
+  return (
+    <Suspense fallback={<CategorySkeleton />}>
+      <CategoryContent slug={slug} />
+    </Suspense>
+  );
+}
+
+async function CategoryContent({ slug }) {
   const categories = await getAllCategories();
   const category = categories.find((c) => c.slug === slug);
 
@@ -37,14 +46,12 @@ export default async function CategoryPage({ params }) {
           <h1 className="text-2xl md:text-3xl font-bold text-slate-800">
             {category.nameBn}
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            আজকের দাম ও পরিবর্তন
-          </p>
+          <p className="text-sm text-slate-500 mt-1">আজকের দাম ও পরিবর্তন</p>
         </div>
       </div>
 
-      {/* Sort + Count */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      {/* Count */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6">
         <p className="text-sm text-slate-600">
           মোট{" "}
           <span className="font-semibold text-slate-800">
@@ -52,13 +59,6 @@ export default async function CategoryPage({ params }) {
           </span>{" "}
           টি পণ্য দেখানো হচ্ছে
         </p>
-
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-slate-600 whitespace-nowrap">
-            সাজান:
-          </label>
-          <SortDropdown products={products} />
-        </div>
       </div>
 
       {/* Products grid or empty state */}
@@ -72,18 +72,6 @@ export default async function CategoryPage({ params }) {
         </div>
       )}
     </div>
-  );
-}
-
-// Simple client component for sorting (optional — could skip)
-function SortDropdown() {
-  return (
-    <select
-      disabled
-      className="appearance-none bg-white border border-slate-300 rounded-lg pl-3 pr-9 py-2 text-sm text-slate-700 cursor-not-allowed"
-    >
-      <option>ডিফল্ট</option>
-    </select>
   );
 }
 
@@ -103,6 +91,22 @@ function EmptyCategoryState() {
       >
         হোম পেজে ফিরে যান
       </Link>
+    </div>
+  );
+}
+
+function CategorySkeleton() {
+  return (
+    <div>
+      <div className="h-4 w-40 rounded skeleton mb-4" />
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6 flex items-center gap-4">
+        <div className="w-14 h-14 rounded-xl skeleton" />
+        <div className="flex-1 space-y-2">
+          <div className="h-6 w-40 rounded skeleton" />
+          <div className="h-4 w-32 rounded skeleton" />
+        </div>
+      </div>
+      <SectionSkeleton count={6} />
     </div>
   );
 }
