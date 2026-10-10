@@ -63,3 +63,4 @@ Navbar এর নিচে infinite scrolling price ticker যেখানে �
 ---
 
 ## 📁 Folder Structure
+
