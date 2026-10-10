@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🛒 বাজার দর (BazarDor)
 
-## Getting Started
+> বাংলাদেশের প্রতিদিনের প্রয়োজনীয় পণ্যের দাম এক নজরে — চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম-দুধ ও মসলার আজকের দাম, বাজারভিত্তিক তুলনা ও পরিবর্তনের হিসাব।
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔗 Live Links
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🌐 **Live Site:** [Coming soon — will add after deployment]
+- 📦 **GitHub Repository:** [Your repo link here]
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📖 Project Description
 
-## Learn More
+**বাজার দর** হলো একটি modern web application যেটি বাংলাদেশের বিভিন্ন বাজারের প্রতিদিনের পণ্যের দাম এক জায়গায় দেখায়। এটি ব্যবহারকারীকে দামের পরিবর্তন (▲ বেড়েছে / ▼ কমেছে), বাজারভিত্তিক সর্বনিম্ন-সর্বোচ্চ-গড় দাম, এবং category অনুযায়ী sorting এর সুবিধা দেয়। Authentication সহ protected product detail page শুধু লগইন করা ব্যবহারকারীরা দেখতে পারে।
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Technologies Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Technology | Purpose |
+|------------|---------|
+| **Next.js 15 (App Router)** | Full-stack React framework |
+| **React 19** | UI library |
+| **Tailwind CSS v4** | Styling & responsiveness |
+| **DaisyUI** | Component library |
+| **BetterAuth** | Authentication (Email/Password + GitHub OAuth) |
+| **MongoDB Atlas** | Database |
+| **MongoDB Adapter** | BetterAuth + MongoDB integration |
+| **react-hot-toast** | Toast notifications |
+| **Google Fonts (Noto Sans Bengali)** | Bengali typography |
+| **Vercel** | Deployment |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ✨ Key Features (5+)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 1. 🏠 **Interactive Home Page**
+Hero section, আজ দাম বেড়েছে ▲ (Top 6 risers), আজ দাম কমেছে ▼ (Top 6 fallers), এবং সব পণ্য (33 items) responsive grid এ দেখায়।
+
+### 2. 🎯 **Category-based Browsing**
+8টি category (চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম-দুধ, মসলা) — প্রতিটির জন্য dedicated page, sort dropdown, skeleton loader এবং empty state।
+
+### 3. 🔒 **Protected Product Detail Page**
+Login ছাড়া প্রবেশ করা যায় না। প্রতিটি পণ্যের min/max/avg দাম এবং ১২টি বাজারের তুলনামূলক data table এ দেখায়।
+
+### 4. 🔐 **Full Authentication System (BetterAuth)**
+Email/Password sign up + sign in, GitHub OAuth login, session management, protected route redirect, এবং toast notifications।
+
+### 5. 🔄 **Update User Info**
+Profile page থেকে নাম পরিবর্তন — BetterAuth এর `updateUser` API ব্যবহার করে।
+
+### 6. 📱 **Fully Responsive Design**
+Mobile, tablet ও desktop এ নিখুঁতভাবে কাজ করে — grid collapses, navbar scroll করে, hero stacks।
+
+### 7. ⚡ **Price Ticker Marquee**
+Navbar এর নিচে infinite scrolling price ticker যেখানে সব পণ্যের দাম ও পরিবর্তন দেখায়।
+
+### 8. 💀 **Skeleton Loading**
+প্রতিটি API call এর সময় skeleton loader — smooth UX।
+
+---
+
+## 📁 Folder Structure
