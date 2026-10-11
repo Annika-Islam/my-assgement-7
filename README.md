@@ -6,18 +6,18 @@
 
 ## 🔗 Live Links
 
-- 🌐 **Live Site:** [Coming soon — will add after deployment]
-- 📦 **GitHub Repository:** [Your repo link here]
+- 🌐 Live Site:  annika-882v.vercel.app
+- 📦 GitHub Repository:   https://github.com/Annika-Islam/my-assgement-7
 
 ---
 
-## 📖 Project Description
+##  Project Description
 
 **বাজার দর** হলো একটি modern web application যেটি বাংলাদেশের বিভিন্ন বাজারের প্রতিদিনের পণ্যের দাম এক জায়গায় দেখায়। এটি ব্যবহারকারীকে দামের পরিবর্তন (▲ বেড়েছে / ▼ কমেছে), বাজারভিত্তিক সর্বনিম্ন-সর্বোচ্চ-গড় দাম, এবং category অনুযায়ী sorting এর সুবিধা দেয়। Authentication সহ protected product detail page শুধু লগইন করা ব্যবহারকারীরা দেখতে পারে।
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 | Technology | Purpose |
 |------------|---------|
