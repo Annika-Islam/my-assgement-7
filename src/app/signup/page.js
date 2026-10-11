@@ -47,10 +47,14 @@ export default function SignUpPage() {
   const handleGoogleLogin = async () => {
     setSocialLoading("google");
     try {
-      await authClient.signIn.social({
+      const { error } = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/",
       });
+      if (error) {
+        toast.error(error.message || "Google সাইন আপ ব্যর্থ হয়েছে");
+        setSocialLoading("");
+      }
     } catch (err) {
       console.error(err);
       toast.error("Google সাইন আপ ব্যর্থ হয়েছে");
@@ -61,10 +65,14 @@ export default function SignUpPage() {
   const handleGithubLogin = async () => {
     setSocialLoading("github");
     try {
-      await authClient.signIn.social({
+      const { error } = await authClient.signIn.social({
         provider: "github",
         callbackURL: "/",
       });
+      if (error) {
+        toast.error(error.message || "GitHub সাইন আপ ব্যর্থ হয়েছে");
+        setSocialLoading("");
+      }
     } catch (err) {
       console.error(err);
       toast.error("GitHub সাইন আপ ব্যর্থ হয়েছে");
